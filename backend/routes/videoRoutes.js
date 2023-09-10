@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const Video = require('../models/Video');
+const parser = require('../uploadMiddleware');
 
 router.get('/', async (req, res) => {
     try {
@@ -12,11 +13,11 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', parser.single('video'), async (req, res) => {
     const video = new Video({
         title: req.body.title,
         description: req.body.description,
-        url: req.body.url,
+        url: req.file.path,
     });
 
     try {

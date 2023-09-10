@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+// src\components\VideoUpload.js
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 function VideoUpload() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [file, setFile] = useState(null);
+    const { authToken } = useContext(AuthContext);
 
     const handleSubmit = () => {
         const formData = new FormData();
@@ -13,6 +16,9 @@ function VideoUpload() {
 
         fetch('http://localhost:5000/videos', {
             method: 'POST',
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
             body: formData,
         })
             .then(response => response.json())

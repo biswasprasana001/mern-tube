@@ -2,30 +2,31 @@
 import React, { useState } from 'react';
 
 function VideoUpload() {
-  const [videoData, setVideoData] = useState({
-    title: '',
-    description: '',
-    url: '',
-  });
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [url, setUrl] = useState('');
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setVideoData({ ...videoData, [name]: value });
-  };
+    const handleSubmit = () => {
+        fetch('http://localhost:5000/videos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ title, description, url }),
+        })
+            .then(response => response.json())
+            .then(data => console.log('Success:', data))
+            .catch(error => console.error('Error:', error));
+    };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // Add code to upload video data to the backend
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" name="title" placeholder="Title" onChange={handleChange} />
-      <input type="text" name="description" placeholder="Description" onChange={handleChange} />
-      <input type="text" name="url" placeholder="Video URL" onChange={handleChange} />
-      <button type="submit">Upload</button>
-    </form>
-  );
+    return (
+        <div>
+            <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
+            <input type="text" placeholder="Video URL" value={url} onChange={(e) => setUrl(e.target.value)} />
+            <button onClick={handleSubmit}>Upload</button>
+        </div>
+    );
 }
 
 export default VideoUpload;

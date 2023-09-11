@@ -30,12 +30,12 @@ function VideoDetails({ video }) {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${authToken}`,
             },
-            body: JSON.stringify({ comment: newComment }),
+            body: JSON.stringify({ username: 'Your Username', comment: newComment }),
         })
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                setComments([...comments, { comment: newComment }]);
+                setComments([...comments, { username: 'Your Username', comment: newComment }]); // Update this line to include the username
                 setNewComment('');
             })
             .catch(error => console.error('Error:', error));
@@ -65,7 +65,7 @@ function VideoDetails({ video }) {
             </div>
             <div>
                 {comments.map((comment, index) => (
-                    <p key={index}>{comment.comment}</p>
+                    <p key={index}><strong>{comment.username}:</strong> {comment.comment}</p> // Update this line to display the username
                 ))}
             </div>
         </div>

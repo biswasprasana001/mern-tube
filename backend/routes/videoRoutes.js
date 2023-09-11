@@ -45,7 +45,7 @@ router.post('/:id/like', authMiddleware, async (req, res) => {
 router.post('/:id/comment', authMiddleware, async (req, res) => {
     try {
         const video = await Video.findById(req.params.id);
-        video.comments.push({ userId: req.userData.userId, comment: req.body.comment });
+        video.comments.push({ userId: req.userData.userId, username: req.body.username, comment: req.body.comment });
         await video.save();
         res.json({ message: 'Comment added' });
     } catch (err) {

@@ -16,6 +16,7 @@ const videoSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  uploader: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   comments: [commentSchema],
 });

@@ -15,7 +15,10 @@ function VideoList() {
     return (
         <div>
             {videos.map((video) => (
-                <VideoDetails key={video._id} video={video} />
+                <div key={video._id}>
+                    <VideoDetails video={video} />
+                    <p>Uploaded by: {video.uploader.username}</p>
+                </div>
             ))}
         </div>
     );

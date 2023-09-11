@@ -7,7 +7,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 router.get('/', async (req, res) => {
     try {
-        const videos = await Video.find();
+        const videos = await Video.find().populate('uploader', 'username');
         res.json(videos);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -19,6 +19,7 @@ router.post('/', authMiddleware, parser.single('video'), async (req, res) => {
         title: req.body.title,
         description: req.body.description,
         url: req.file.path,
+        uploader: req.userData.userId,
     });
 
     try {

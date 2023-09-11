@@ -1,5 +1,6 @@
 // src\components\VideoList.js
 import React, { useState, useEffect } from 'react';
+import VideoDetails from './VideoDetails';
 
 function VideoList() {
     const [videos, setVideos] = useState([]);
@@ -13,12 +14,8 @@ function VideoList() {
 
     return (
         <div>
-            {videos.map(video => (
-                <div key={video._id}>
-                    <h2>{video.title}</h2>
-                    <p>{video.description}</p>
-                    <video src={video.url} controls width="600" />
-                </div>
+            {videos.map((video) => (
+                <VideoDetails key={video._id} video={video} />
             ))}
         </div>
     );

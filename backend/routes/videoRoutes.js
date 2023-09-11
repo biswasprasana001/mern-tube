@@ -29,4 +29,28 @@ router.post('/', authMiddleware, parser.single('video'), async (req, res) => {
     }
 });
 
+router.post('/:id/like', authMiddleware, async (req, res) => {
+    try {
+        const video = await Video.findById(req.params.id);
+        if (!video.likes.includes(req.userData.userId)) {
+            video.likes.push(req.userData.userId);
+            await video.save();
+        }
+        res.json({ message: 'Video liked' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+router.post('/:id/comment', authMiddleware, async (req, res) => {
+    try {
+        const video = await Video.findById(req.params.id);
+        video.comments.push({ userId: req.userData.userId, comment: req.body.comment });
+        await video.save();
+        res.json({ message: 'Comment added' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 module.exports = router;

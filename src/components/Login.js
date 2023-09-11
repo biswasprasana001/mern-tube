@@ -5,7 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { setAuthToken } = useContext(AuthContext);
+  const { setAuthState } = useContext(AuthContext);
 
   const handleSubmit = () => {
     fetch('http://localhost:5000/auth/login', {
@@ -18,7 +18,7 @@ function Login() {
       .then(response => response.json())
       .then(data => {
         console.log('Success:', data);
-        setAuthToken(data.token);
+        setAuthState({ authToken: data.token, username: username });
       })
       .catch(error => console.error('Error:', error));
   };

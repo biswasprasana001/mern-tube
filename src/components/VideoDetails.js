@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 
 function VideoDetails({ video }) {
-    const { authToken } = useContext(AuthContext);
+    const { authState } = useContext(AuthContext);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
 
@@ -15,7 +15,7 @@ function VideoDetails({ video }) {
         fetch(`http://localhost:5000/videos/${video._id}/like`, {
             method: 'POST',
             headers: {
-                Authorization: `Bearer ${authToken}`,
+                Authorization: `Bearer ${authState.authToken}`,
             },
         })
             .then(response => response.json())
@@ -28,14 +28,15 @@ function VideoDetails({ video }) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${authToken}`,
+                Authorization: `Bearer ${authState.authToken}`,
             },
-            body: JSON.stringify({ username: 'Your Username', comment: newComment }),
+            body: JSON.stringify({ username: authState.username, comment: newComment }),
         })
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                setComments([...comments, { username: 'Your Username', comment: newComment }]); // Update this line to include the username
+                console.log(authState);
+                setComments([...comments, { username: authState.username, comment: newComment }]);
                 setNewComment('');
             })
             .catch(error => console.error('Error:', error));

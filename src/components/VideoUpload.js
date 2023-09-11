@@ -6,7 +6,7 @@ function VideoUpload() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [file, setFile] = useState(null);
-    const { authToken } = useContext(AuthContext);
+    const { authState } = useContext(AuthContext);
 
     const handleSubmit = () => {
         const formData = new FormData();
@@ -17,7 +17,7 @@ function VideoUpload() {
         fetch('http://localhost:5000/videos', {
             method: 'POST',
             headers: {
-                Authorization: `Bearer ${authToken}`,
+                Authorization: `Bearer ${authState.authToken}`,
             },
             body: formData,
         })

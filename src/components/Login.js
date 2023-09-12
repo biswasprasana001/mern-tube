@@ -18,7 +18,7 @@ function Login() {
       .then(response => response.json())
       .then(data => {
         console.log('Success:', data);
-        setAuthState({ authToken: data.token, username: username });
+        setAuthState({ authToken: data.token, username: username, userId: data.userId });
       })
       .catch(error => console.error('Error:', error));
   };

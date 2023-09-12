@@ -1,19 +1,35 @@
 // src\components\VideoList.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import VideoDetails from './VideoDetails';
 
 function VideoList() {
+    const { authState } = useContext(AuthContext);
     const [videos, setVideos] = useState([]);
+    const [showUserVideos, setShowUserVideos] = useState(false);
 
     useEffect(() => {
-        fetch('http://localhost:5000/videos')
-            .then(response => response.json())
-            .then(data => setVideos(data))
-            .catch(error => console.error('Error:', error));
-    }, []);
+        const fetchVideos = async () => {
+            try {
+                const endpoint = showUserVideos ? `/user/${authState.userId}` : '/';
+                const response = await fetch(`http://localhost:5000/videos${endpoint}`);
+                const data = await response.json();
+                setVideos(data);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        fetchVideos();
+    }, [showUserVideos, authState.userId]);
 
     return (
         <div>
+            {authState.authToken && (
+                <button onClick={() => setShowUserVideos((prev) => !prev)}>
+                    {showUserVideos ? 'Show All Videos' : 'Show My Videos'}
+                </button>
+            )}
             {videos.map((video) => (
                 <div key={video._id}>
                     <VideoDetails video={video} />

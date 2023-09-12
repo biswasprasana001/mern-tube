@@ -30,6 +30,15 @@ router.post('/', authMiddleware, parser.single('video'), async (req, res) => {
     }
 });
 
+router.get('/user/:userId', async (req, res) => {
+    try {
+        const videos = await Video.find({ uploader: req.params.userId }).populate('uploader', 'username');
+        res.json(videos);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 router.post('/:id/like', authMiddleware, async (req, res) => {
     try {
         const video = await Video.findById(req.params.id);

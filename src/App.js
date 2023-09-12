@@ -1,21 +1,27 @@
 // src\App.js
-import React from 'react';
-import { AuthProvider } from './context/AuthContext';
+import React, { useContext } from 'react';
+import { AuthContext } from './context/AuthContext';
 import VideoList from './components/VideoList';
 import VideoUpload from './components/VideoUpload';
 import Register from './components/Register';
 import Login from './components/Login';
+import LogoutButton from './components/LogoutButton';
 
 function App() {
+  const { authState } = useContext(AuthContext);
+
   return (
-    <AuthProvider>
-      <div>
-        <Register />
-        <Login />
-        <VideoUpload />
-        <VideoList />
-      </div>
-    </AuthProvider>
+    <div>
+      <Register />
+      <Login />
+      {authState.authToken && (
+        <>
+          <LogoutButton />
+          <VideoUpload />
+          <VideoList />
+        </>
+      )}
+    </div>
   );
 }
 

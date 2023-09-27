@@ -23,6 +23,10 @@ function VideoList() {
         fetchVideos();
     }, [showUserVideos, authState.userId]);
 
+    const handleDelete = (videoId) => {
+        setVideos(videos.filter(video => video._id !== videoId));
+    };
+
     return (
         <div>
             {authState.authToken && (
@@ -32,7 +36,7 @@ function VideoList() {
             )}
             {videos.map((video) => (
                 <div key={video._id}>
-                    <VideoDetails video={video} />
+                    <VideoDetails video={video} showDeleteButton={showUserVideos} onDelete={handleDelete} />
                     <p>Uploaded by: {video.uploader.username}</p>
                 </div>
             ))}

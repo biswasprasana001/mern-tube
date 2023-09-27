@@ -2,13 +2,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 
-function VideoDetails({ video }) {
+function VideoDetails({ video, showDeleteButton, onDelete }) {
     const { authState } = useContext(AuthContext);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
+    const [like, setLike] = useState([]);
+    const [showComments, setShowComments] = useState(false);
 
     useEffect(() => {
         setComments(video.comments);
+        setLike(video.likes);
     }, [video]);
 
     const handleLike = () => {
@@ -19,8 +22,12 @@ function VideoDetails({ video }) {
             },
         })
             .then(response => response.json())
-            .then(data => console.log(data))
+            .then(data => setLike(data.likes))
             .catch(error => console.error('Error:', error));
+    };
+
+    const toggleComments = () => {
+        setShowComments(!showComments);
     };
 
     const handleComment = () => {
@@ -47,28 +54,49 @@ function VideoDetails({ video }) {
         alert('Link copied to clipboard');
     };
 
+    const handleDelete = () => {
+        fetch(`http://localhost:5000/videos/${video._id}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${authState.authToken}`,
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                onDelete(video._id);
+            })
+            .catch(error => console.error('Error:', error));
+    };
+
     return (
         <div>
             <h2>{video.title}</h2>
             <p>{video.description}</p>
             <video src={video.url} controls width="600" />
-            <p>Likes: {video.likes.length}</p>
+            <p>Likes: {like.length}</p>
             <button onClick={handleLike}>Like</button>
             <button onClick={handleShare}>Share</button>
-            <div>
-                <input
-                    type="text"
-                    placeholder="Add a comment"
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                />
-                <button onClick={handleComment}>Comment</button>
-            </div>
-            <div>
-                {comments.map((comment, index) => (
-                    <p key={index}><strong>{comment.username}:</strong> {comment.comment}</p> // Update this line to display the username
-                ))}
-            </div>
+            {showDeleteButton && <button onClick={handleDelete}>Delete</button>}
+            <button onClick={toggleComments}>
+                {showComments ? 'Hide Comments' : 'Show Comments'}
+            </button>
+            {showComments && (
+                <div>
+                    <div>
+                        <input
+                            type="text"
+                            placeholder="Add a comment"
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                        />
+                        <button onClick={handleComment}>Comment</button>
+                    </div>
+                    {comments.map((comment, index) => (
+                        <p key={index}><strong>{comment.username}:</strong> {comment.comment}</p>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

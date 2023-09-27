@@ -14,10 +14,10 @@ const storage = new CloudinaryStorage({
   params: {
     folder: 'video-sharing-platform',
     resource_type: 'video',
-    public_id: (req, file) => file.originalname,
+    // public_id: (req, file) => file.originalname, // You can uncomment this line if you want to set a custom public ID based on the original file name
   },
 });
 
 const parser = multer({ storage: storage });
 
-module.exports = parser;
+module.exports = {parser, cloudinary};

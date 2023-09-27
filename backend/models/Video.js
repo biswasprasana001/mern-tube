@@ -19,6 +19,7 @@ const videoSchema = new mongoose.Schema({
   uploader: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   comments: [commentSchema],
+  cloudinary_id: { type: String, required: true },
 });
 
 module.exports = mongoose.model('Video', videoSchema);

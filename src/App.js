@@ -12,9 +12,12 @@ function App() {
 
   return (
     <div>
-      <Register />
-      <Login />
-      {authState.authToken && (
+      {!authState.authToken ? ( // Conditionally render based on authToken
+        <>
+          <Register />
+          <Login />
+        </>
+      ) : (
         <>
           <LogoutButton />
           <VideoUpload />

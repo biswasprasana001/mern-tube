@@ -1,31 +1,7 @@
 // src\components\VideoUpload.js
-import React, { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import React from 'react';
 
-function VideoUpload() {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [file, setFile] = useState(null);
-    const { authState } = useContext(AuthContext);
-
-    const handleSubmit = () => {
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('video', file);
-
-        fetch('http://localhost:5000/videos', {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${authState.authToken}`,
-            },
-            body: formData,
-        })
-            .then(response => response.json())
-            .then(data => console.log('Success:', data))
-            .catch(error => console.error('Error:', error));
-    };
-
+function VideoUpload({ title, setTitle, description, setDescription, file, setFile, handleSubmit }) {
     return (
         <div>
             <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />

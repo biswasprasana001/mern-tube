@@ -22,13 +22,17 @@ function App() {
     <div>
       {!authState.authToken ? ( // If 'authToken' is not present (i.e., the user is not logged in)...
         <>
-          <Register /> // ...render the Register component...
-          <Login /> // ...and the Login component.
+          <Register />
+          {/* ...render the Register component... */}
+          <Login />
+          {/* // ...and the Login component. */}
         </>
       ) : ( // If 'authToken' is present (i.e., the user is logged in)...
         <>
-          <LogoutButton /> // ...render the LogoutButton component...
-          <Home /> // ...and the Home component.
+          <LogoutButton />
+          {/* // ...render the LogoutButton component... */}
+          <Home />
+          {/* // ...and the Home component. */}
         </>
       )}
     </div>

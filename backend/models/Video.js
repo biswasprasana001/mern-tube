@@ -38,6 +38,8 @@ const videoSchema = new mongoose.Schema({
   uploader: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 
   // Each video will have likes. These are references to the Users who liked the video.
+  // simple mock data of below property
+  // likes: [{ userId: '123', username: 'kyle' }]
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 
   // Each video will have comments. These are subdocuments, each with a structure defined by the commentSchema.

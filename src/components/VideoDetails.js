@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from 'react'; // Importing Rea
 import { AuthContext } from '../context/AuthContext'; // Importing AuthContext from our context
 
 // Defining a functional component called VideoDetails
-function VideoDetails({ video, showDeleteButton, onDelete }) {
+function VideoDetails({ video, buttonState, onDelete }) {
     // Using the useContext hook to access our AuthContext
     const { authState } = useContext(AuthContext); // Accessing authState from our AuthContext
 
@@ -94,11 +94,11 @@ function VideoDetails({ video, showDeleteButton, onDelete }) {
             {/* Displaying the video player */}
             <p>Likes: {like.length}</p>
             {/* Displaying the number of likes */}
-            <button onClick={handleLike}>Like</button>
+            <button onClick={handleLike}>{like.includes(authState.userId) ? 'Unlike' : 'Like'}</button>
             {/* Like button */}
             <button onClick={handleShare}>Share</button>
             {/* Share button */}
-            {showDeleteButton && <button onClick={handleDelete}>Delete</button>}
+            {buttonState != 'allVideos' && <button onClick={handleDelete}>Delete</button>}
             {/* Delete button, only shown if showDeleteButton is true */}
             <button onClick={toggleComments}>
                 {showComments ? 'Hide Comments' : 'Show Comments'}

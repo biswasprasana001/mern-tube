@@ -11,7 +11,7 @@ import VideoDetails from './VideoDetails';
 
 // This is the VideoList component. It's a functional component that displays a list of videos.
 // It takes several props: 'videos', 'showUserVideos', 'setShowUserVideos', 'handleDelete', and 'isLoading'.
-function VideoList({ videos, showUserVideos, setShowUserVideos, handleDelete, isLoading }) {
+function VideoList({ videos, buttonState, setButtonState, handleDelete, isLoading }) {
     // Using the 'useContext' hook to access the current value of AuthContext.
     // The current value here is the value prop of the closest AuthContext.Provider up the tree from this component.
     const { authState } = useContext(AuthContext);
@@ -23,14 +23,18 @@ function VideoList({ videos, showUserVideos, setShowUserVideos, handleDelete, is
     return (
         <div>
             {authState.authToken && (
-                <button onClick={() => setShowUserVideos((prev) => !prev)}>
-                    {showUserVideos ? 'Show All Videos' : 'Show My Videos'}
-                </button>
+                <button onClick={() => setButtonState('allVideos')}>All Videos</button>
+            )}
+            {authState.authToken && (
+                <button onClick={() => setButtonState('userVideos')}>My Videos</button>
+            )}
+            {authState.authToken && (
+                <button onClick={() => setButtonState('likedVideos')}>Liked Videos</button>
             )}
             {isLoading && "...Loading"}
             {videos.map((video) => (
                 <div key={video._id}>
-                    <VideoDetails video={video} showDeleteButton={showUserVideos} onDelete={handleDelete} />
+                    <VideoDetails video={video} buttonState={buttonState} onDelete={handleDelete} />
                     <p>Uploaded by: {video.uploader.username}</p>
                 </div>
             ))}

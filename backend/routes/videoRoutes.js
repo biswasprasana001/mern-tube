@@ -83,7 +83,16 @@ router.post('/:id/like', authMiddleware, async (req, res) => {
             video.likes.splice(index, 1);
         }
         await video.save();
-        res.json({likes: video.likes});
+        res.json({ likes: video.likes });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+router.get('/my-likes/:userId', async (req, res) => {
+    try {
+        const videos = await Video.find({ likes: { $in: [req.params.userId] } }).populate('uploader', 'username');
+        res.json(videos);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

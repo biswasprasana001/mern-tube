@@ -12,13 +12,13 @@ import { AuthContext } from '../context/AuthContext';
 
 // This is the Home component. It's a functional component that handles video upload and listing.
 function Home() {
-    // Using the 'useState' hook to create state variables for 'title', 'description', 'file', 'videos', 'showUserVideos', and 'isLoading'.
+    // Using the 'useState' hook to create state variables for 'title', 'description', 'file', 'videos', 'buttonState', and 'isLoading'.
     // All are initially set to either an empty string, null, an empty array, or false.
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [file, setFile] = useState(null);
     const [videos, setVideos] = useState([]);
-    const [showUserVideos, setShowUserVideos] = useState(false);
+    const [buttonState, setButtonState] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     // Using the 'useContext' hook to access the current value of AuthContext.
@@ -63,10 +63,14 @@ function Home() {
             if (!isLoading) {
                 setIsLoading(true);
             }
-
-            // The endpoint is set to '/user/{userId}' if 'showUserVideos' is true, otherwise it's set to '/'.
-            const endpoint = showUserVideos ? `/user/${authState.userId}` : '/';
-            // A GET request is made to the '/videos{endpoint}' endpoint.
+            let endpoint = '';
+            if (buttonState === 'allVideos') {
+                endpoint = '/';
+            } else if (buttonState === 'userVideos') {
+                endpoint = `/user/${authState.userId}`;
+            } else if (buttonState === 'likedVideos') {
+                endpoint = `/my-likes/${authState.userId}`;
+            }
             const response = await fetch(`http://localhost:5000/videos${endpoint}`);
             // The response from the server is converted to JSON.
             const data = await response.json();
@@ -80,10 +84,10 @@ function Home() {
         }
     };
 
-    // The 'useEffect' hook is used to call the 'fetchVideos' function when the component mounts and whenever 'showUserVideos' or 'authState.userId' changes.
+    // The 'useEffect' hook is used to call the 'fetchVideos' function when the component mounts and whenever 'buttonState' or 'authState.userId' changes.
     useEffect(() => {
         fetchVideos();
-    }, [showUserVideos, authState.userId]);
+    }, [buttonState, authState.userId]);
 
     // This is the function that will be called when a video is deleted. It removes the video from the 'videos' state variable.
     const handleDelete = (videoId) => {
@@ -105,8 +109,8 @@ function Home() {
             />
             <VideoList
                 videos={videos}
-                showUserVideos={showUserVideos}
-                setShowUserVideos={setShowUserVideos}
+                buttonState={buttonState}
+                setButtonState={setButtonState}
                 handleDelete={handleDelete}
                 isLoading={isLoading}
             />

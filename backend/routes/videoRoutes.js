@@ -2,10 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const Video = require('../models/Video');
+const Playlist = require('../models/Playlist');
 const { parser, cloudinary } = require('../uploadMiddleware');
 const authMiddleware = require('../middleware/authMiddleware');
 
-router.get('/', async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
     try {
         const videos = await Video.find().populate('uploader', 'username');
         res.json(videos);
@@ -64,7 +65,7 @@ router.delete('/:id', authMiddleware, async (req, res) => {
     }
 });
 
-router.get('/user/:userId', async (req, res) => {
+router.get('/user/:userId', authMiddleware, async (req, res) => {
     try {
         const videos = await Video.find({ uploader: req.params.userId }).populate('uploader', 'username');
         res.json(videos);
@@ -89,7 +90,7 @@ router.post('/:id/like', authMiddleware, async (req, res) => {
     }
 });
 
-router.get('/my-likes/:userId', async (req, res) => {
+router.get('/my-likes/:userId', authMiddleware, async (req, res) => {
     try {
         const videos = await Video.find({ likes: { $in: [req.params.userId] } }).populate('uploader', 'username');
         res.json(videos);
@@ -108,5 +109,99 @@ router.post('/:id/comment', authMiddleware, async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+// route to create a new playlist
+router.post('/playlist', authMiddleware, async (req, res) => {
+    try {
+        const playlist = new Playlist({
+            name: req.body.name,
+            videos: [req.body.videoId],
+            userId: req.body.userId
+        });
+        const newPlaylist = await playlist.save();
+        res.status(201).json(newPlaylist);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+// route to get all playlists
+router.get('/playlists', authMiddleware, async (req, res) => {
+    try {
+        const playlists = await Playlist.find({ userId: req.userData.userId });
+        res.json(playlists);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// route to get detail about a playlist
+router.get('/playlist/:id', authMiddleware, async (req, res) => {
+    try {
+        const playlist = await Playlist.findById(req.params.id);
+        res.json(playlist);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+
+// route to add a video to a playlist
+router.put('/playlist/:id', authMiddleware, async (req, res) => {
+    try {
+        const playlist = await Playlist.findById(req.params.id);
+        if (playlist.userId.toString() !== req.body.userId) {
+            return res.status(403).json({ message: 'Forbidden' });
+        }
+        playlist.videos.push(req.body.videoId);
+        await playlist.save();
+        res.json({ message: 'Video added to playlist' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// route to delete a playlist
+router.delete('/playlist/:id', authMiddleware, async (req, res) => {
+    try {
+        const playlist = await Playlist.findById(req.params.id);
+        if (playlist.userId.toString() !== req.userData.userId) {
+            return res.status(403).json({ message: 'Forbidden' });
+        }
+        await Playlist.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Playlist deleted' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// route to get all videos in a playlist
+router.get('/playlist/:id/videos', authMiddleware, async (req, res) => {
+    try {
+        const playlist = await Playlist.findById(req.params.id);
+        if (playlist.userId.toString() !== req.userData.userId) {
+            return res.status(403).json({ message: 'Forbidden' });
+        }
+        res.json(playlist.videos);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// route to delete a video from a playlist
+router.delete('/playlist/:id/video/:videoId', authMiddleware, async (req, res) => {
+    try {
+        const playlist = await Playlist.findById(req.params.id);
+        if (playlist.userId.toString() !== req.userData.userId) {
+            return res.status(403).json({ message: 'Forbidden' });
+        }
+        playlist.videos = playlist.videos.filter(videoId => videoId.toString() !== req.params.videoId);
+        await playlist.save();
+        res.json({ message: 'Video removed from playlist' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 
 module.exports = router;

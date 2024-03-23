@@ -71,7 +71,12 @@ function Home() {
             } else if (buttonState === 'likedVideos') {
                 endpoint = `/my-likes/${authState.userId}`;
             }
-            const response = await fetch(`http://localhost:5000/videos${endpoint}`);
+            const response = await fetch(`http://localhost:5000/videos${endpoint}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${authState.authToken}`,
+                },
+            });
             // The response from the server is converted to JSON.
             const data = await response.json();
             // The 'videos' state variable is updated with the data from the response.

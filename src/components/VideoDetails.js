@@ -2,6 +2,7 @@
 // Importing necessary hooks and context from React and our application
 import React, { useState, useEffect, useContext } from 'react'; // Importing React and some hooks from 'react'
 import { AuthContext } from '../context/AuthContext'; // Importing AuthContext from our context
+import PlayListForm from './PlayListForm'; // Importing PlayListForm from our components folder
 
 // Defining a functional component called VideoDetails
 function VideoDetails({ video, buttonState, onDelete }) {
@@ -13,6 +14,7 @@ function VideoDetails({ video, buttonState, onDelete }) {
     const [newComment, setNewComment] = useState(''); // State for new comment
     const [like, setLike] = useState([]); // State for likes
     const [showComments, setShowComments] = useState(false); // State for showing/hiding comments
+    const [playListForm, setPlayListForm] = useState(false); // State for showing/hiding playlist form
 
     // Using the useEffect hook to update our state variables when the video prop changes
     useEffect(() => {
@@ -104,6 +106,12 @@ function VideoDetails({ video, buttonState, onDelete }) {
                 {showComments ? 'Hide Comments' : 'Show Comments'}
                 {/* Button to toggle showing/hiding comments */}
             </button>
+            {/* Comment button */}
+            <button onClick={() => setPlayListForm(true)}>Add to Playlist</button>
+            {playListForm && (
+                <PlayListForm videoId={video._id} setPlayListForm={setPlayListForm}/>
+            )}
+            {/* Playlist button */}
             {showComments && (
                 <div>
                     <div>

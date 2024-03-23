@@ -89,6 +89,19 @@ function Home() {
         }
     };
 
+     const fetchPlaylists = async () => {
+        const response = await fetch('http://localhost:5000/videos/playlists', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${authState.authToken}`,
+            },
+            userData: JSON.stringify({ userId: authState.userId })
+        })
+        const data = await response.json();
+        setPlaylists(data);
+    }
+
     // The 'useEffect' hook is used to call the 'fetchVideos' function when the component mounts and whenever 'buttonState' or 'authState.userId' changes.
     useEffect(() => {
         fetchVideos();

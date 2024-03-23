@@ -31,7 +31,13 @@ function VideoList({ videos, buttonState, setButtonState, handleDelete, isLoadin
             {authState.authToken && (
                 <button onClick={() => setButtonState('likedVideos')}>Liked Videos</button>
             )}
+            {authState.authToken && (
+                <button onClick={() => setButtonState('playlists')}>Saved Videos</button>
+            )}
             {isLoading && "...Loading"}
+            {buttonState === 'playlists' && (                
+                
+            )}
             {videos.map((video) => (
                 <div key={video._id}>
                     <VideoDetails video={video} buttonState={buttonState} onDelete={handleDelete} />

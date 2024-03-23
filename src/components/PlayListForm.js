@@ -1,10 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
+import {usePlayLists} from "../hooks/usePlayLists";
 
 const PlayListForm = ({ videoId, setPlayListForm }) => {
     const { authState } = useContext(AuthContext);
     const [name, setName] = useState('');
-    const [playlists, setPlaylists] = useState([]);
+    const [playlists, fetchPlaylists] = usePlayLists();
 
     const handleChange = (event) => {
         setName(event.target.value);
@@ -22,20 +23,6 @@ const PlayListForm = ({ videoId, setPlayListForm }) => {
             body: JSON.stringify({ name, videoId, userId: authState.userId })
         })
         setName('');
-    }
-
-    // Get all playlists
-    const fetchPlaylists = async () => {
-        const response = await fetch('http://localhost:5000/videos/playlists', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${authState.authToken}`,
-            },
-            userData: JSON.stringify({ userId: authState.userId })
-        })
-        const data = await response.json();
-        setPlaylists(data);
     }
 
     useEffect(() => {

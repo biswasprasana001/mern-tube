@@ -9,13 +9,15 @@ import { AuthContext } from '../context/AuthContext';
 // Importing the VideoDetails component from the 'components' directory.
 import VideoDetails from './VideoDetails';
 
+import usePlayLists from '../hooks/usePlayLists';
+
 // This is the VideoList component. It's a functional component that displays a list of videos.
 // It takes several props: 'videos', 'showUserVideos', 'setShowUserVideos', 'handleDelete', and 'isLoading'.
 function VideoList({ videos, buttonState, setButtonState, handleDelete, isLoading }) {
     // Using the 'useContext' hook to access the current value of AuthContext.
     // The current value here is the value prop of the closest AuthContext.Provider up the tree from this component.
     const { authState } = useContext(AuthContext);
-
+    const [playlists, fetchPlaylists] = usePlayLists();
     // The component returns a div containing a button (if 'authToken' is present), a loading message (if 'isLoading' is true), and a list of videos.
     // The 'onClick' prop of the button is used to toggle the 'showUserVideos' state variable.
     // The 'videos' state variable is mapped to a list of VideoDetails components.
@@ -35,8 +37,15 @@ function VideoList({ videos, buttonState, setButtonState, handleDelete, isLoadin
                 <button onClick={() => setButtonState('playlists')}>Saved Videos</button>
             )}
             {isLoading && "...Loading"}
-            {buttonState === 'playlists' && (                
-                
+            {buttonState === 'playlists' && (
+                // fetch the playlists as buttons & when clicked changes the button state
+                <div>
+                    {playlists.map(playlist => (
+                        <button key={playlist._id} onClick={() => setButtonState(`${playlist._id}`)}>
+                            {playlist.name}
+                        </button>
+                    ))}
+                </div>
             )}
             {videos.map((video) => (
                 <div key={video._id}>

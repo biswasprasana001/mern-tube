@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { authState } from "../context/AuthContext";
+import { useState, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const usePlayLists = () => {
     const [playlists, setPlaylists] = useState([]);
+    const {authState} = useContext(AuthContext);
     const fetchPlaylists = async () => {
         const response = await fetch('http://localhost:5000/videos/playlists', {
             method: 'GET',
@@ -18,4 +19,4 @@ const usePlayLists = () => {
     return [playlists, fetchPlaylists]
 }
 
-export default usePlayLists
+export default usePlayLists;

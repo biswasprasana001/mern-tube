@@ -1,117 +1,92 @@
-// src\components\VideoDetails.js
-// Importing necessary hooks and context from React and our application
-import React, { useState, useEffect, useContext } from 'react'; // Importing React and some hooks from 'react'
-import { AuthContext } from '../context/AuthContext'; // Importing AuthContext from our context
-import PlayListForm from './PlayListForm'; // Importing PlayListForm from our components folder
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import PlayListForm from './PlayListForm';
 
-// Defining a functional component called VideoDetails
 function VideoDetails({ video, buttonState, onDelete }) {
-    // Using the useContext hook to access our AuthContext
-    const { authState } = useContext(AuthContext); // Accessing authState from our AuthContext
+    const { authState } = useContext(AuthContext);
 
-    // Using the useState hook to create state variables for our component
-    const [comments, setComments] = useState([]); // State for comments
-    const [newComment, setNewComment] = useState(''); // State for new comment
-    const [like, setLike] = useState([]); // State for likes
-    const [showComments, setShowComments] = useState(false); // State for showing/hiding comments
-    const [playListForm, setPlayListForm] = useState(false); // State for showing/hiding playlist form
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState('');
+    const [like, setLike] = useState([]);
+    const [showComments, setShowComments] = useState(false);
+    const [playListForm, setPlayListForm] = useState(false);
 
-    // Using the useEffect hook to update our state variables when the video prop changes
     useEffect(() => {
-        setComments(video.comments); // Updating comments state with comments from video prop
-        setLike(video.likes); // Updating likes state with likes from video prop
-    }, [video]); // This effect runs whenever the video prop changes
+        setComments(video.comments);
+        setLike(video.likes);
+    }, [video]);
 
-    // Function to handle liking a video
     const handleLike = () => {
-        // Making a POST request to our server to like the video
         fetch(`http://localhost:5000/videos/${video._id}/like`, {
-            method: 'POST', // Specifying the request method
+            method: 'POST',
             headers: {
-                Authorization: `Bearer ${authState.authToken}`, // Sending the auth token in the request headers
+                Authorization: `Bearer ${authState.authToken}`,
             },
         })
-            .then(response => response.json()) // Parsing the response data as JSON
-            .then(data => setLike(data.likes)) // Updating the likes state with the new likes data
-            .catch(error => console.error('Error:', error)); // Logging any errors
+            .then(response => response.json())
+            .then(data => setLike(data.likes))
+            .catch(error => console.error('Error:', error));
     };
 
-    // Function to toggle showing/hiding comments
     const toggleComments = () => {
-        setShowComments(!showComments); // Updating showComments state to its opposite value
+        setShowComments(!showComments);
     };
 
-    // Function to handle commenting on a video
     const handleComment = () => {
-        // Making a POST request to our server to add a comment to the video
         fetch(`http://localhost:5000/videos/${video._id}/comment`, {
-            method: 'POST', // Specifying the request method
+            method: 'POST',
             headers: {
-                'Content-Type': 'application/json', // Specifying the content type of our request body
-                Authorization: `Bearer ${authState.authToken}`, // Sending the auth token in the request headers
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${authState.authToken}`,
             },
-            body: JSON.stringify({ username: authState.username, comment: newComment }), // Sending the username and new comment in the request body
+            body: JSON.stringify({ username: authState.username, comment: newComment }),
         })
-            .then(response => response.json()) // Parsing the response data as JSON
+            .then(response => response.json())
             .then(data => {
-                console.log(data); // Logging the response data
-                console.log(authState); // Logging the auth state
-                setComments([...comments, { username: authState.username, comment: newComment }]); // Updating the comments state with the new comment
-                setNewComment(''); // Resetting the newComment state
+                console.log(data);
+                console.log(authState);
+                setComments([...comments, { username: authState.username, comment: newComment }]);
+                setNewComment('');
             })
-            .catch(error => console.error('Error:', error)); // Logging any errors
+            .catch(error => console.error('Error:', error));
     };
 
-    // Function to handle sharing a video
     const handleShare = () => {
-        navigator.clipboard.writeText(window.location.href); // Copying the current URL to the clipboard
-        alert('Link copied to clipboard'); // Alerting the user that the link has been copied
+        navigator.clipboard.writeText(window.location.href);
+        alert('Link copied to clipboard');
     };
 
-    // Function to handle deleting a video
     const handleDelete = () => {
-        // Making a DELETE request to our server to delete the video
         fetch(`http://localhost:5000/videos/${video._id}`, {
-            method: 'DELETE', // Specifying the request method
+            method: 'DELETE',
             headers: {
-                Authorization: `Bearer ${authState.authToken}`, // Sending the auth token in the request headers
+                Authorization: `Bearer ${authState.authToken}`,
             },
         })
-            .then(response => response.json()) // Parsing the response data as JSON
+            .then(response => response.json())
             .then(data => {
-                console.log(data); // Logging the response data
-                onDelete(video._id); // Calling the onDelete function passed as a prop with the video's ID
+                console.log(data);
+                onDelete(video._id);
             })
-            .catch(error => console.error('Error:', error)); // Logging any errors
+            .catch(error => console.error('Error:', error));
     };
 
-    // The JSX that our component returns
     return (
         <div>
             <h2>{video.title}</h2>
-            {/* Displaying the video's title */}
             <p>{video.description}</p>
-            {/* Displaying the video's description */}
             <video src={video.url} controls width="600" />
-            {/* Displaying the video player */}
             <p>Likes: {like.length}</p>
-            {/* Displaying the number of likes */}
             <button onClick={handleLike}>{like.includes(authState.userId) ? 'Unlike' : 'Like'}</button>
-            {/* Like button */}
             <button onClick={handleShare}>Share</button>
-            {/* Share button */}
             {buttonState != 'allVideos' && <button onClick={handleDelete}>Delete</button>}
-            {/* Delete button, only shown if showDeleteButton is true */}
             <button onClick={toggleComments}>
                 {showComments ? 'Hide Comments' : 'Show Comments'}
-                {/* Button to toggle showing/hiding comments */}
             </button>
-            {/* Comment button */}
             <button onClick={() => setPlayListForm(true)}>Add to Playlist</button>
             {playListForm && (
-                <PlayListForm videoId={video._id} setPlayListForm={setPlayListForm}/>
+                <PlayListForm videoId={video._id} setPlayListForm={setPlayListForm} />
             )}
-            {/* Playlist button */}
             {showComments && (
                 <div>
                     <div>
@@ -119,13 +94,12 @@ function VideoDetails({ video, buttonState, onDelete }) {
                             type="text"
                             placeholder="Add a comment"
                             value={newComment}
-                            onChange={(e) => setNewComment(e.target.value)} // Updating newComment state when the input changes
+                            onChange={(e) => setNewComment(e.target.value)}
                         />
                         <button onClick={handleComment}>Comment</button>
-                        {/* Comment button */}
                     </div>
                     {comments.map((comment, index) => (
-                        <p key={index}><strong>{comment.username}:</strong> {comment.comment}</p> // Displaying each comment
+                        <p key={index}><strong>{comment.username}:</strong> {comment.comment}</p>
                     ))}
                 </div>
             )}
@@ -133,4 +107,4 @@ function VideoDetails({ video, buttonState, onDelete }) {
     );
 }
 
-export default VideoDetails; // Exporting our component
+export default VideoDetails;

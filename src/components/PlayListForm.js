@@ -29,7 +29,6 @@ const PlayListForm = ({ videoId, setPlayListForm }) => {
         fetchPlaylists();
     }, []);
 
-    // Save the video in the playlist
     const saveVideo = (playlistId) => {
         console.log(playlistId);
         fetch(`http://localhost:5000/videos/playlist/${playlistId}`, {
@@ -50,7 +49,6 @@ const PlayListForm = ({ videoId, setPlayListForm }) => {
             </label>
             {playlists.map(playlist => (
                 <div key={playlist._id}>
-                    {/* when clicked calls a function that saves the video in the playlist */}
                     <button onClick={(e) => { e.preventDefault(); saveVideo(playlist._id); }}>
                         {playlist.name}
                     </button>

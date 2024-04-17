@@ -48,6 +48,9 @@ function Home() {
                 endpoint = `/user/${authState.userId}`;
             } else if (buttonState === 'likedVideos') {
                 endpoint = `/my-likes/${authState.userId}`;
+            } else if (buttonState !== '' && buttonState !== 'allVideos' && buttonState !== 'userVideos' && buttonState !== 'likedVideos' && buttonState !== 'playlists') {
+                // get all videos in a playlist
+                endpoint = `/playlist/${buttonState}/videos`
             }
             const response = await fetch(`http://localhost:5000/videos${endpoint}`, {
                 method: 'GET',

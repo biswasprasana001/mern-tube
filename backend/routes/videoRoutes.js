@@ -178,7 +178,10 @@ router.delete('/playlist/:id', authMiddleware, async (req, res) => {
 // route to get all videos in a playlist
 router.get('/playlist/:id/videos', authMiddleware, async (req, res) => {
     try {
-        const playlist = await Playlist.findById(req.params.id);
+        const playlist = await Playlist.findById(req.params.id).populate({
+            path: 'videos',
+            populate: { path: 'uploader' }
+        });;
         if (playlist.userId.toString() !== req.userData.userId) {
             return res.status(403).json({ message: 'Forbidden' });
         }

@@ -79,7 +79,9 @@ function VideoDetails({ video, buttonState, onDelete }) {
             <p>Likes: {like.length}</p>
             <button onClick={handleLike}>{like.includes(authState.userId) ? 'Unlike' : 'Like'}</button>
             <button onClick={handleShare}>Share</button>
-            {buttonState != 'allVideos' && <button onClick={handleDelete}>Delete</button>}
+            {buttonState !== '' && buttonState !== 'allVideos' && buttonState !== 'likedVideos' && (
+                <button onClick={handleDelete}>Delete</button>
+            )}
             <button onClick={toggleComments}>
                 {showComments ? 'Hide Comments' : 'Show Comments'}
             </button>

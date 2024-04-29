@@ -57,7 +57,11 @@ function VideoDetails({ video, buttonState, onDelete }) {
     };
 
     const handleDelete = () => {
-        fetch(`http://localhost:5000/videos/${video._id}`, {
+        const apiUrl = buttonState === 'userVideos'
+            ? `http://localhost:5000/videos/${video._id}`
+            : `http://localhost:5000/videos/playlist/${buttonState}/video/${video._id}`;
+
+        fetch(apiUrl, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${authState.authToken}`,

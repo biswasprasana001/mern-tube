@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { AuthContext } from '../context/AuthContext';
 
@@ -9,7 +9,26 @@ import usePlayLists from '../hooks/usePlayLists';
 function VideoList({ videos, buttonState, setButtonState, handleDelete, isLoading }) {
     const { authState } = useContext(AuthContext);
     const [playlists, fetchPlaylists] = usePlayLists();
-    if (buttonState === 'playlists' && playlists.length === 0) fetchPlaylists();
+    const handlePlaylistDelete = (playlistId) => {
+        fetch(`http://localhost:5000/videos/playlist/${playlistId}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${authState.authToken}`,
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // fetchPlaylists();
+                setButtonState('allVideos');
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    useEffect(() => {
+        if (buttonState === 'playlists' && playlists.length === 0) fetchPlaylists();
+    }, [buttonState])
+
     return (
         <div>
             {authState.authToken && (
@@ -25,12 +44,17 @@ function VideoList({ videos, buttonState, setButtonState, handleDelete, isLoadin
                 <button onClick={() => setButtonState('playlists')}>Saved Videos</button>
             )}
             {isLoading && "...Loading"}
-            {buttonState === 'playlists' && (
+            {buttonState !== 'allVideos' && buttonState !== 'userVideos' && buttonState !== 'likedVideos' && (
                 <div>
                     {playlists.map(playlist => (
-                        <button key={playlist._id} onClick={() => setButtonState(`${playlist._id}`)}>
-                            {playlist.name}
-                        </button>
+                        <div key={playlist._id}>
+                            <button onClick={() => setButtonState(`${playlist._id}`)}>
+                                {playlist.name}
+                            </button>
+                            <button onClick={() => handlePlaylistDelete(playlist._id)}>
+                                Delete
+                            </button>
+                        </div>
                     ))}
                 </div>
             )}

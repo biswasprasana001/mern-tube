@@ -26,7 +26,7 @@ function VideoList({ videos, buttonState, setButtonState, handleDelete, isLoadin
     }
 
     useEffect(() => {
-        if (buttonState === 'playlists' && playlists.length === 0) fetchPlaylists();
+        if (buttonState === 'playlists') fetchPlaylists();
     }, [buttonState])
 
     return (

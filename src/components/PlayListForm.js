@@ -30,7 +30,6 @@ const PlayListForm = ({ videoId, setPlayListForm }) => {
     }, []);
 
     const saveVideo = (playlistId) => {
-        console.log(playlistId);
         fetch(`http://localhost:5000/videos/playlist/${playlistId}`, {
             method: 'PUT',
             headers: {

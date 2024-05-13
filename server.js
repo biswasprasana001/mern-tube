@@ -18,7 +18,7 @@ app.use(cors());
 // The connection string is provided as the first argument, and an options object as the second.
 // The 'useNewUrlParser' and 'useUnifiedTopology' options are set to true to use the new URL string parser and the new server discovery and monitoring engine, respectively.
 // The 'then' method logs a success message to the console if the connection is successful, and the 'catch' method logs an error message if there's an error.
-mongoose.connect('mongodb+srv://biswasprasana004:8UCNznXjFB36fIZY@cluster0.huekuwu.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true }).then(() => console.log("Connected to MongoDB")).catch((error) => console.error("Error connecting to MongoDB:", error));;
+mongoose.connect('mongodb+srv://biswasprasana004:lQOfazb5pdQineVQ@cluster0.24xpqwn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true }).then(() => console.log("Connected to MongoDB")).catch((error) => console.error("Error connecting to MongoDB:", error));;
 
 // Using the 'express.json' middleware to parse incoming requests with JSON payloads.
 app.use(express.json());

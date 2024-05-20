@@ -79,19 +79,18 @@ function Home() {
             <VideoUpload
                 title={title}
                 setTitle={setTitle}
+                setFile={setFile}
                 description={description}
                 setDescription={setDescription}
-                file={file}
-                setFile={setFile}
                 handleSubmit={handleSubmit}
             />
-            <VideoList
+            {/* <VideoList
                 videos={videos}
                 buttonState={buttonState}
                 setButtonState={setButtonState}
                 handleDelete={handleDelete}
                 isLoading={isLoading}
-            />
+            /> */}
         </div>
     );
 }

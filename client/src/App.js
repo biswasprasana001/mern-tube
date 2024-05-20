@@ -1,11 +1,10 @@
+// client\src\App.js
 import React, { useContext } from 'react';
 
 import { AuthContext } from './context/AuthContext';
 
 import Home from './components/Home';
-import Register from './components/Register';
-import Login from './components/Login';
-import LogoutButton from './components/LogoutButton';
+import Authentication from './components/Authentication';
 
 function App() {
   const { authState } = useContext(AuthContext);
@@ -14,12 +13,10 @@ function App() {
     <div>
       {!authState.authToken ? (
         <>
-          <Register />
-          <Login />
+          <Authentication />
         </>
       ) : (
         <>
-          <LogoutButton />
           <Home />
         </>
       )}

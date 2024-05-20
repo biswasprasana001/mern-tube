@@ -84,13 +84,13 @@ function Home() {
                 setDescription={setDescription}
                 handleSubmit={handleSubmit}
             />
-            {/* <VideoList
+            <VideoList
                 videos={videos}
                 buttonState={buttonState}
                 setButtonState={setButtonState}
                 handleDelete={handleDelete}
                 isLoading={isLoading}
-            /> */}
+            />
         </div>
     );
 }

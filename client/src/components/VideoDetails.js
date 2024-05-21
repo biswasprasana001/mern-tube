@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import PlayListForm from './PlayListForm';
+import ReactPlayer from 'react-player';
+import "../styles/VideoDetails.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp, faShare, faTrash, faComment, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 function VideoDetails({ video, buttonState, onDelete }) {
     const { authState } = useContext(AuthContext);
@@ -76,23 +80,35 @@ function VideoDetails({ video, buttonState, onDelete }) {
     };
 
     return (
-        <div>
-            <h2>{video.title}</h2>
-            <p>{video.description}</p>
-            <video src={video.url} controls width="600" />
-            <p>Likes: {like.length}</p>
-            <button onClick={handleLike}>{like.includes(authState.userId) ? 'Unlike' : 'Like'}</button>
-            <button onClick={handleShare}>Share</button>
-            {buttonState !== '' && buttonState !== 'allVideos' && buttonState !== 'likedVideos' && (
-                <button onClick={handleDelete}>Delete</button>
-            )}
-            <button onClick={toggleComments}>
-                {showComments ? 'Hide Comments' : 'Show Comments'}
-            </button>
-            <button onClick={() => setPlayListForm(true)}>Add to Playlist</button>
-            {playListForm && (
-                <PlayListForm videoId={video._id} setPlayListForm={setPlayListForm} />
-            )}
+        <div id='video-details'>
+            <h2 id='video-title'>{video.title}</h2>
+            <p id='video-description'>{video.description}</p>
+            <div id='video-player'>
+                <ReactPlayer url={video.url} controls width='100%' />
+            </div>
+            <p id='video-likes'>Likes: {like.length}</p>
+            <div id='video-buttons'>
+                <button onClick={handleLike} id='like-btn'>
+                    <FontAwesomeIcon icon={faThumbsUp} /> {like.includes(authState.userId) ? 'Unlike' : 'Like'}
+                </button>
+                <button onClick={handleShare} id='share-btn'>
+                    <FontAwesomeIcon icon={faShare} /> Share
+                </button>
+                {buttonState !== '' && buttonState !== 'allVideos' && buttonState !== 'likedVideos' && (
+                    <button onClick={handleDelete} id='delete-btn'>
+                        <FontAwesomeIcon icon={faTrash} /> Delete
+                    </button>
+                )}
+                <button onClick={toggleComments} id='comment-btn'>
+                    <FontAwesomeIcon icon={faComment} /> {showComments ? 'Hide Comments' : 'Show Comments'}
+                </button>
+                <button onClick={() => setPlayListForm(true)} id='add-to-playlist-btn'>
+                    <FontAwesomeIcon icon={faPlus} /> Add to Playlist
+                </button>
+                {playListForm && (
+                    <PlayListForm videoId={video._id} setPlayListForm={setPlayListForm} />
+                )}
+            </div>
             {showComments && (
                 <div>
                     <div>

@@ -47,7 +47,9 @@ function VideoList({ videos, buttonState, setButtonState, handleDelete, isLoadin
                     <button onClick={() => setButtonState('playlists')} id='saved-videos'>Saved Videos</button>
                 )}
             </div>
-            {isLoading && "...Loading"}
+            <center>
+                {isLoading && "...Loading"}
+            </center>
             {buttonState !== 'allVideos' && buttonState !== 'userVideos' && buttonState !== 'likedVideos' && (
                 <div id='playlist-btns'>
                     {playlists.map(playlist => (
@@ -65,7 +67,7 @@ function VideoList({ videos, buttonState, setButtonState, handleDelete, isLoadin
             {videos.map((video) => (
                 <div key={video._id} id='video'>
                     <VideoDetails video={video} buttonState={buttonState} onDelete={handleDelete} />
-                    <p>Uploaded by: {video.uploader.username}</p>
+                    <p id='uploaded-by'>Uploaded by: {video.uploader.username}</p>
                 </div>
             ))}
         </div>

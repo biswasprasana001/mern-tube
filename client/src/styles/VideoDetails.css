@@ -1,0 +1,80 @@
+#video-details {
+    /* border: 2px solid blue; */
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+}
+
+#video-title {
+    /* border: 2px solid green; */
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#video-description {
+    /* border: 2px solid red; */
+    text-align: center;
+    margin-bottom: 20px;
+    /* implement shadow */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#video-player {
+    /* implement a beautiful shadow */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#video-likes {
+    border: 2px solid orange;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#video-buttons {
+    border: 2px solid pink;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+@media screen and (min-width: 601px) {
+    #video-title {
+      font-size: 30px;
+    }
+    #video-description {
+      font-size: 20px;
+    }
+  }
+  
+  /* If the screen size is 600px wide or less, set the font-size of <div> to 30px */
+  @media screen and (max-width: 600px) {
+    #video-title {
+      font-size: 20px;
+    }
+    #video-description {
+      font-size: 15px;
+    }
+    #video-buttons {
+      flex-direction: column;
+    }
+  }
+  
+  @media screen and (max-width: 350px) {
+    #video-title {
+      font-size: 15px;
+    }
+    #video-description {
+      font-size: 10px;
+    }
+  } 

@@ -4,7 +4,7 @@ import PlayListForm from './PlayListForm';
 import ReactPlayer from 'react-player';
 import "../styles/VideoDetails.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faShare, faTrash, faComment, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsUp, faShare, faTrash, faComment, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 function VideoDetails({ video, buttonState, onDelete }) {
     const { authState } = useContext(AuthContext);
@@ -79,6 +79,10 @@ function VideoDetails({ video, buttonState, onDelete }) {
             .catch(error => console.error('Error:', error));
     };
 
+    const togglePlayListForm = () => {
+        setPlayListForm(prevState => !prevState);
+    };
+
     return (
         <div id='video-details'>
             <h2 id='video-title'>{video.title}</h2>
@@ -87,41 +91,45 @@ function VideoDetails({ video, buttonState, onDelete }) {
                 <ReactPlayer url={video.url} controls width='100%' />
             </div>
             <p id='video-likes'>Likes: {like.length}</p>
-            <div id='video-buttons'>
-                <button onClick={handleLike} id='like-btn'>
-                    <FontAwesomeIcon icon={faThumbsUp} /> {like.includes(authState.userId) ? 'Unlike' : 'Like'}
-                </button>
-                <button onClick={handleShare} id='share-btn'>
-                    <FontAwesomeIcon icon={faShare} /> Share
-                </button>
-                {buttonState !== '' && buttonState !== 'allVideos' && buttonState !== 'likedVideos' && (
-                    <button onClick={handleDelete} id='delete-btn'>
-                        <FontAwesomeIcon icon={faTrash} /> Delete
+            <div id='video-controls'>
+                <div id='video-buttons'>
+                    <button onClick={handleLike} id='like-btn'>
+                        <FontAwesomeIcon icon={faThumbsUp} /> {like.includes(authState.userId) ? 'Unlike' : 'Like'}
                     </button>
-                )}
-                <button onClick={toggleComments} id='comment-btn'>
-                    <FontAwesomeIcon icon={faComment} /> {showComments ? 'Hide Comments' : 'Show Comments'}
-                </button>
-                <button onClick={() => setPlayListForm(true)} id='add-to-playlist-btn'>
-                    <FontAwesomeIcon icon={faPlus} /> Add to Playlist
-                </button>
-                {playListForm && (
-                    <PlayListForm videoId={video._id} setPlayListForm={setPlayListForm} />
-                )}
+                    <button onClick={handleShare} id='share-btn'>
+                        <FontAwesomeIcon icon={faShare} /> Share
+                    </button>
+                    {buttonState !== '' && buttonState !== 'allVideos' && buttonState !== 'likedVideos' && (
+                        <button onClick={handleDelete} id='delete-btn'>
+                            <FontAwesomeIcon icon={faTrash} /> Delete
+                        </button>
+                    )}
+                    <button onClick={toggleComments} id='comment-btn'>
+                        <FontAwesomeIcon icon={faComment} /> {showComments ? 'Hide Comments' : 'Show Comments'}
+                    </button>
+                    <button onClick={togglePlayListForm} id='add-to-playlist-btn'>
+                        <FontAwesomeIcon icon={playListForm ? faMinus : faPlus} />
+                        {playListForm ? ' Hide Playlists' : ' Add to Playlist'}
+                    </button>
+                </div>
+                <div id='playlist-form-container'>
+                    {playListForm && (
+                        <PlayListForm videoId={video._id} setPlayListForm={setPlayListForm} />
+                    )}
+                </div>
             </div>
             {showComments && (
-                <div>
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="Add a comment"
-                            value={newComment}
-                            onChange={(e) => setNewComment(e.target.value)}
-                        />
-                        <button onClick={handleComment}>Comment</button>
-                    </div>
+                <div id='comment-section'>
+                    <input
+                        type="text"
+                        placeholder="Add a comment"
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        id='comment-input'
+                    />
+                    <button onClick={handleComment} id='comment-submit-btn'>Comment</button>
                     {comments.map((comment, index) => (
-                        <p key={index}><strong>{comment.username}:</strong> {comment.comment}</p>
+                        <p key={index} id='comment'><strong>{comment.username}:</strong> {comment.comment}</p>
                     ))}
                 </div>
             )}

@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import usePlayLists from "../hooks/usePlayLists";
+import '../styles/PlayListForm.css';
 
 const PlayListForm = ({ videoId, setPlayListForm }) => {
     const { authState } = useContext(AuthContext);
@@ -41,20 +42,20 @@ const PlayListForm = ({ videoId, setPlayListForm }) => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label>
+        <form onSubmit={handleSubmit} id="playlist-form">
+            <label id="playlist-name-label">
                 Playlist name:
-                <input type="text" name="name" value={name} onChange={handleChange} />
+                <input type="text" name="name" value={name} onChange={handleChange} id="playlist-name-input" />
             </label>
-            {playlists.map(playlist => (
-                <div key={playlist._id}>
-                    <button onClick={(e) => { e.preventDefault(); saveVideo(playlist._id); }}>
+            <div id="playlist-add-btns">
+                {playlists.map(playlist => (
+                    <button onClick={(e) => { e.preventDefault(); saveVideo(playlist._id); }} key={playlist._id} id="playlist">
                         {playlist.name}
                     </button>
-                </div>
-            ))}
-            <button type="submit">Add playlist</button>
-            <button onClick={(e) => { e.preventDefault(); setPlayListForm(false); }}>Cancel</button>
+                ))}
+            </div>
+            <button type="submit" id="playlist-submit">Add playlist</button>
+            <button onClick={(e) => { e.preventDefault(); setPlayListForm(false); }} id="playlist-cancel">Cancel</button>
         </form>
     );
 };

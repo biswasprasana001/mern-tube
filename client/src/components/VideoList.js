@@ -50,7 +50,7 @@ function VideoList({ videos, buttonState, setButtonState, handleDelete, isLoadin
             <center>
                 {isLoading && "...Loading"}
             </center>
-            {buttonState !== 'allVideos' && buttonState !== 'userVideos' && buttonState !== 'likedVideos' && (
+            {buttonState !== 'allVideos' && buttonState !== 'userVideos' && buttonState !== 'likedVideos' && buttonState !== 'playlists' && (
                 <div id='playlist-btns'>
                     {playlists.map(playlist => (
                         <div key={playlist._id} id='playlist-btn'>

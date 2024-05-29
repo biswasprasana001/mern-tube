@@ -10,7 +10,7 @@ function Auth() {
     const { setAuthState } = useContext(AuthContext);
 
     const handleSubmit = () => {
-        const url = isLogin ? 'http://localhost:5000/auth/login' : 'http://localhost:5000/auth/register';
+        const url = isLogin ? 'https://mern-tube-server.onrender.com/auth/login' : 'https://mern-tube-server.onrender.com/auth/register';
         fetch(url, {
             method: 'POST',
             headers: {

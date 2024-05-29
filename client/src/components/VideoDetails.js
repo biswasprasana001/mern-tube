@@ -21,7 +21,7 @@ function VideoDetails({ video, buttonState, onDelete }) {
     }, [video]);
 
     const handleLike = () => {
-        fetch(`http://localhost:5000/videos/${video._id}/like`, {
+        fetch(`https://mern-tube-server.onrender.com/videos/${video._id}/like`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${authState.authToken}`,
@@ -37,7 +37,7 @@ function VideoDetails({ video, buttonState, onDelete }) {
     };
 
     const handleComment = () => {
-        fetch(`http://localhost:5000/videos/${video._id}/comment`, {
+        fetch(`https://mern-tube-server.onrender.com/videos/${video._id}/comment`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -47,8 +47,6 @@ function VideoDetails({ video, buttonState, onDelete }) {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                console.log(authState);
                 setComments([...comments, { username: authState.username, comment: newComment }]);
                 setNewComment('');
             })
@@ -62,8 +60,8 @@ function VideoDetails({ video, buttonState, onDelete }) {
 
     const handleDelete = () => {
         const apiUrl = buttonState === 'userVideos'
-            ? `http://localhost:5000/videos/${video._id}`
-            : `http://localhost:5000/videos/playlist/${buttonState}/video/${video._id}`;
+            ? `https://mern-tube-server.onrender.com/videos/${video._id}`
+            : `https://mern-tube-server.onrender.com/videos/playlist/${buttonState}/video/${video._id}`;
 
         fetch(apiUrl, {
             method: 'DELETE',
@@ -73,7 +71,6 @@ function VideoDetails({ video, buttonState, onDelete }) {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 onDelete(video._id);
             })
             .catch(error => console.error('Error:', error));

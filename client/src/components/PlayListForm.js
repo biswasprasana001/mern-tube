@@ -15,7 +15,7 @@ const PlayListForm = ({ videoId, setPlayListForm }) => {
     // Add a new playlist    
     const handleSubmit = (event) => {
         event.preventDefault();
-        fetch('http://localhost:5000/videos/playlist', {
+        fetch('https://mern-tube-server.onrender.com/videos/playlist', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ const PlayListForm = ({ videoId, setPlayListForm }) => {
     }, []);
 
     const saveVideo = (playlistId) => {
-        fetch(`http://localhost:5000/videos/playlist/${playlistId}`, {
+        fetch(`https://mern-tube-server.onrender.com/playlist/${playlistId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

@@ -5,7 +5,7 @@ const usePlayLists = () => {
     const [playlists, setPlaylists] = useState([]);
     const {authState} = useContext(AuthContext);
     const fetchPlaylists = async () => {
-        const response = await fetch('http://localhost:5000/videos/playlists', {
+        const response = await fetch('https://mern-tube-server.onrender.com/videos/playlists', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

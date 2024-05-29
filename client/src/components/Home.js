@@ -23,7 +23,7 @@ function Home() {
         formData.append('description', description);
         formData.append('video', file);
 
-        fetch('http://localhost:5000/videos', {
+        fetch('https://mern-tube-server.onrender.com/videos', {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${authState.authToken}`,
@@ -31,7 +31,6 @@ function Home() {
             body: formData,
         })
             .then(response => response.json())
-            .then(data => console.log('Success:', data))
             .then(() => fetchVideos())
             .catch(error => console.error('Error:', error));
     };
@@ -52,7 +51,7 @@ function Home() {
                 // get all videos in a playlist
                 endpoint = `/playlist/${buttonState}/videos`
             }
-            const response = await fetch(`http://localhost:5000/videos${endpoint}`, {
+            const response = await fetch(`https://mern-tube-server.onrender.com/videos${endpoint}`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${authState.authToken}`,

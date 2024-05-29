@@ -12,7 +12,7 @@ function VideoList({ videos, buttonState, setButtonState, handleDelete, isLoadin
     const { authState } = useContext(AuthContext);
     const [playlists, fetchPlaylists] = usePlayLists();
     const handlePlaylistDelete = (playlistId) => {
-        fetch(`http://localhost:5000/videos/playlist/${playlistId}`, {
+        fetch(`https://mern-tube-server.onrender.com/videos/playlist/${playlistId}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${authState.authToken}`,
@@ -20,8 +20,6 @@ function VideoList({ videos, buttonState, setButtonState, handleDelete, isLoadin
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                // fetchPlaylists();
                 setButtonState('allVideos');
             })
             .catch(error => console.error('Error:', error));
@@ -50,18 +48,22 @@ function VideoList({ videos, buttonState, setButtonState, handleDelete, isLoadin
             <center>
                 {isLoading && "...Loading"}
             </center>
-            {buttonState !== 'allVideos' && buttonState !== 'userVideos' && buttonState !== 'likedVideos' && buttonState !== 'playlists' && (
+            {buttonState !== "" && buttonState !== 'allVideos' && buttonState !== 'userVideos' && buttonState !== 'likedVideos' && (
                 <div id='playlist-btns'>
-                    {playlists.map(playlist => (
-                        <div key={playlist._id} id='playlist-btn'>
-                            <button onClick={() => setButtonState(`${playlist._id}`)} id='playlist-name-btn'>
-                                {playlist.name}
-                            </button>
-                            <button onClick={() => handlePlaylistDelete(playlist._id)} id='playlist-delete-btn'>
-                                Delete
-                            </button>
-                        </div>
-                    ))}
+                    {playlists.length > 0 ? (
+                        playlists.map(playlist => (
+                            <div key={playlist._id} id='playlist-btn'>
+                                <button onClick={() => setButtonState(`${playlist._id}`)} id='playlist-name-btn'>
+                                    {playlist.name}
+                                </button>
+                                <button onClick={() => handlePlaylistDelete(playlist._id)} id='playlist-delete-btn'>
+                                    Delete
+                                </button>
+                            </div>
+                        ))
+                    ) : (
+                        <p>There are no playlists.</p>
+                    )}
                 </div>
             )}
             {videos.map((video) => (

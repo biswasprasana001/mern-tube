@@ -14,7 +14,7 @@ MERN Tube is a video-sharing platform built using the MERN stack (MongoDB, Expre
 
 ## Live Demo
 
-You can access the live version of the project [here](https://mern-tube-client.onrender.com). Please note that it may take 50 seconds or longer to load, as the server shuts down after 30 minutes of inactivity and requires time to restart upon receiving a new request.
+You can access the live version of the project [here](https://mern-tube-client.vercel.app/). Please note that it may take 50 seconds or longer to load, as the server shuts down after 30 minutes of inactivity and requires time to restart upon receiving a new request.
 
 ## Getting Started
 
